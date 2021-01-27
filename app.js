@@ -2,19 +2,22 @@ function getPlots(id) {
     //Read Samples.json
         d3.json("samples.json").then (sampledata =>{
             console.log(sampledata)
-            var ids = sampledata.samples[0].otu_ids;
+           
+            var result = sampledata.samples.filter(sample => sample.id.toString() === id);
+            console.log(result)
+            var ids = result[0].otu_ids;
             console.log(ids)
-            var sampleValues = sampledata.samples[0].sample_values.slice(0,10).reverse();
+            var sampleValues = result[0].sample_values.slice(0,10).reverse();
             console.log(sampleValues)
-            var labels =  sampledata.samples[0].otu_labels.slice(0,10);
+            var labels =  result[0].otu_labels.slice(0,10);
             console.log (labels)
         // Top 10 OTU IDs for the Bar Plot OTU and Reversing it. 
-            var OTUtop = ( sampledata.samples[0].otu_ids.slice(0, 10)).reverse();
+            var OTUtop = ( result[0].otu_ids.slice(0, 10)).reverse();
         // OTU ID's to the Desired Form for the Plot
             var OTUid = OTUtop.map(d => "OTU" + d);
             console.log(`OTU IDS: ${OTUid}`)
          // Top 10 Labels for the Plot
-            var labels =  sampledata.samples[0].otu_labels.slice(0,10);
+            var labels =  result[0].otu_labels.slice(0,10);
             console.log(`OTU_labels: ${labels}`)
             var trace = {
                 x: sampleValues,
@@ -46,14 +49,14 @@ function getPlots(id) {
         Plotly.newPlot("bar", data, layout);
             // Create Bubble Chart
             var trace1 = {
-                x: sampledata.samples[0].otu_ids,
-                y: sampledata.samples[0].sample_values,
+                x: result[0].otu_ids,
+                y: result[0].sample_values,
                 mode: "markers",
                 marker: {
-                    size: sampledata.samples[0].sample_values,
-                    color: sampledata.samples[0].otu_ids
+                    size: result[0].sample_values,
+                    color: result[0].otu_ids
                 },
-                text:sampledata.samples[0].otu_labels
+                text:result[0].otu_labels
     
             };
     
